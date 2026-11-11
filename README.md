@@ -1,5 +1,3 @@
-# G02-Smart-City-Infrastructure-Consultancy-Part2-Group
-
 # G02 – Smart City Infrastructure Consultancy
 
 This is **Part 1** of our Group Project for COS-10026.  
