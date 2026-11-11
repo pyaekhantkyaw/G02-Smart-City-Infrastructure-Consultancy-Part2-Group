@@ -5,7 +5,7 @@
 
 $jobs = [];
 $databaseError = false;
-$searchTerm = trim($_GET['q'] ?? '');
+$searchTerm = trim($_GET['search'] ?? '');
 $conn = null;
 
 try {
@@ -268,7 +268,7 @@ function jobs_format_date($date)
                 <input
                     type="search"
                     id="search-box"
-                    name="q"
+                    name="search"
                     placeholder="Enter a job or service"
                     value="<?= jobs_escape($searchTerm) ?>"
                 >
