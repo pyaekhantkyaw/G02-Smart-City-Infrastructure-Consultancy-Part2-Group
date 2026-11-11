@@ -1,3 +1,78 @@
+<?php
+// ==========================================
+// URBANSYNC - DYNAMIC ABOUT PAGE
+// ==========================================
+
+$members = [];
+$databaseError = false;
+$conn = null;
+
+try {
+    // Load database settings from the same folder as about.php.
+    $settingsPath = __DIR__ . '/settings.php';
+
+    if (!file_exists($settingsPath)) {
+        throw new RuntimeException('settings.php is missing. Place it in the same folder as about.php.');
+    }
+
+    $config = require $settingsPath;
+
+    if (!is_array($config)) {
+        throw new RuntimeException('The database settings are invalid.');
+    }
+
+    foreach (['host', 'user', 'password', 'database'] as $key) {
+        if (!array_key_exists($key, $config)) {
+            throw new RuntimeException('A required database setting is missing.');
+        }
+    }
+
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    $conn = new mysqli(
+        $config['host'],
+        $config['user'],
+        $config['password'],
+        $config['database']
+    );
+    $conn->set_charset('utf8mb4');
+
+    // Retrieve member contributions and fun facts from the About table.
+    $sql = "SELECT
+                member_id,
+                member_name,
+                student_id,
+                linkedin_url,
+                project1_contribution,
+                project2_contribution,
+                quote_mm,
+                quote_translation,
+                dream_job,
+                coding_snack,
+                hometown
+            FROM `about`
+            ORDER BY display_order ASC, member_name ASC";
+
+    $result = $conn->query($sql);
+
+    while ($row = $result->fetch_assoc()) {
+        $members[] = $row;
+    }
+
+    $result->free();
+
+} catch (Throwable $error) {
+    $databaseError = true;
+    error_log('UrbanSync about page database error: ' . $error->getMessage());
+}
+
+// Escape database content before displaying it in HTML.
+function about_escape($value)
+{
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +96,7 @@
 <body>
     <!-- ==================== HEADER ==================== -->
     <?php include 'header.inc'; ?>
+
     <!-- ==================== MAIN CONTENT ==================== -->
     <main>
         <!-- ==================== INTRODUCTION ==================== -->
@@ -38,8 +114,8 @@
                     <ul>
                         <li><strong>Session:</strong> AUG 2026 (Swinburne University of Technology, Australia)</li>
                         <li><strong>Course:</strong> COS10026 - Web Technology Project</li>
-                        <li><strong>Class Day:</strong> Monday & Thursday</li>
-                        <li><strong>Class Time:</strong> 10:30 AM – 12:30 PM & 2:00 PM – 4:00 PM</li>
+                        <li><strong>Class Day:</strong> Monday &amp; Thursday</li>
+                        <li><strong>Class Time:</strong> 10:30 AM – 12:30 PM &amp; 2:00 PM – 4:00 PM</li>
                         <li><strong>Industry Allocation:</strong> G02 – Smart City Infrastructure Consultancy</li>
                         <li><strong>Lecturer:</strong> PAWANI T.RASARATNAM</li>
                     </ul>
@@ -48,66 +124,53 @@
         </section>
 
         <!-- ==================== TEAM CONTRIBUTIONS ==================== -->
- <!-- ==================== TEAM CONTRIBUTIONS ==================== -->
         <section>
             <h2>Team Contributions &amp; Quotes</h2>
-            <dl class="team-contributions">
-                
-                <!-- Pyae Khant Kyaw -->
-                <div class="team-card">
-                    <dt>
-                        <a href="https://www.linkedin.com/in/pyae-khant-kyaw-591726390/" target="_blank" rel="noopener">
-                        <strong>Pyae Khant Kyaw</strong>
-                        </a>
-                    </dt>
-                    <dd>
-                        <span class="member-id">Student ID: 106628822</span>
-                        <p><strong>Role &amp; Contribution:</strong> Built layout and styled the <code>index.html & apply.html</code> pages, implemented accessible definition lists, structured tables, figure captions, and configured CSS hover rules.</p>
-                        <blockquote>“ကြိုးစားရင် ဘာမဆို ဖြစ်နိုင်ပါတယ်။”</blockquote>
-                        <p><strong>English Translation:</strong> “If you try hard, anything is possible.”</p>
-                    </dd>
-                </div>
 
-                <!-- Han Lin Aung -->
-                <div class="team-card">
-                    <dt><a href="https://www.linkedin.com/in/han-lin-aung-30025931a/" target="_blank" rel="noopener">
-                        <strong>Han Lin Aung</strong>
-                    </a></dt>
-                    <dd>
-                        <span class="member-id">Student ID: 106391247</span>
-                        <p><strong>Role &amp; Contribution:</strong> Designed and developed the <code>about.html</code> home page, configured navigation links, header elements, search box, and table cell merging.</p>
-                        <blockquote>“ပညာရွှေအိုး လူမခိုး။”</blockquote>
-                        <p><strong>English Translation:</strong> “Knowledge is a treasure chest that no one can steal.”</p>
-                    </dd>
-                </div>
+            <?php if ($databaseError): ?>
+                <p class="database-message">
+                    Team contributions cannot be displayed right now. Please check the database connection.
+                </p>
+            <?php elseif (empty($members)): ?>
+                <p>No team member records are currently available.</p>
+            <?php else: ?>
+                <dl class="team-contributions">
+                    <?php foreach ($members as $member): ?>
+                        <div class="team-card">
+                            <dt>
+                                <?php if (!empty($member['linkedin_url'])): ?>
+                                    <a href="<?= about_escape($member['linkedin_url']) ?>" target="_blank" rel="noopener noreferrer">
+                                        <strong><?= about_escape($member['member_name']) ?></strong>
+                                    </a>
+                                <?php else: ?>
+                                    <strong><?= about_escape($member['member_name']) ?></strong>
+                                <?php endif; ?>
+                            </dt>
+                            <dd>
+                                <span class="member-id">Student ID: <?= about_escape($member['student_id']) ?></span>
 
-                <!-- Oakkar Aung -->
-                <div class="team-card">
-                    <dt><a href="https://www.linkedin.com/in/oakkar-aung-b70077332/" target="_blank" rel="noopener">
-                        <strong>Oakkar Aung</strong>
-                    </a></dt>
-                    <dd>
-                        <span class="member-id">Student ID: 106628835</span>
-                        <p><strong>Role &amp; Contribution:</strong> Authored the <code>explore.html & its related</code> pages, detailed position descriptions, implemented the <code>&lt;aside&gt;</code> layout, and organized job requirements lists.</p>
-                        <blockquote>“ညီညွတ်ခြင်းသည် အားဖြစ်၏။”</blockquote>
-                        <p><strong>English Translation:</strong> “Unity is strength.”</p>
-                    </dd>
-                </div>
+                                <p>
+                                    <strong>Project 1 Contribution:</strong>
+                                    <?= nl2br(about_escape($member['project1_contribution'])) ?>
+                                </p>
 
-                <!-- Min Khant Kyaw -->
-                <div class="team-card">
-                    <dt><a href="https://www.linkedin.com/in/min-khant-kyaw-52973a392/" target="_blank" rel="noopener">
-                        <strong>Min Khant Kyaw</strong>
-                    </a></dt>
-                    <dd>
-                       <span class="member-id">Student ID: 106677086</span>
-                        <p><strong>Role &amp; Contribution:</strong> Created the <code>jobs.html</code> page, implemented <code>&lt;aside&gt;</code> & HTML5 form validation patterns, accessible fieldsets, and Flexbox form layout.</p>
-                        <blockquote>“ဇွဲ၊ လုံ့လ၊ ဝီရိယ ရှိပါစေ။”</blockquote>
-                        <p><strong>English Translation:</strong> “Persevere with patience and effort.”</p>
-                    </dd>
-                </div>
+                                <p>
+                                    <strong>Project 2 Contribution:</strong>
+                                    <?= nl2br(about_escape($member['project2_contribution'])) ?>
+                                </p>
 
-            </dl>
+                                <?php if (!empty($member['quote_mm'])): ?>
+                                    <blockquote>“<?= about_escape($member['quote_mm']) ?>”</blockquote>
+                                <?php endif; ?>
+
+                                <?php if (!empty($member['quote_translation'])): ?>
+                                    <p><strong>English Translation:</strong> “<?= about_escape($member['quote_translation']) ?>”</p>
+                                <?php endif; ?>
+                            </dd>
+                        </div>
+                    <?php endforeach; ?>
+                </dl>
+            <?php endif; ?>
         </section>
 
         <!-- ==================== GROUP PHOTO ==================== -->
@@ -122,43 +185,33 @@
         <!-- ==================== FUN FACTS ==================== -->
         <section>
             <h2>Team Fun Facts</h2>
-            <table class="fun-facts-table">
-                <caption>A few fun facts about our project team</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Student</th>
-                        <th scope="col">Dream Job</th>
-                        <th scope="col">Coding Snack</th>
-                        <th scope="col">Hometown</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Pyae Khant Kyaw</th>
-                        <td>Data Scientist/ ML Engineer</td>
-                        <td>Fruits</td>
-                        <td>Myanmar</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Han Lin Aung</th>
-                        <td>Software Developer</td>
-                        <td>Potato Chips & Energy Drink</td>
-                        <td>Myanmar</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Oakkar Aung</th>
-                        <td>Cybersecurity Specialist</td>
-                        <td>Chocolate cookie</td>
-                        <td>Myanmar</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Min Khant Kyaw</th>
-                        <td>Cybersecurity Specialist</td>
-                        <td>Chocolate (Oreo)</td>
-                        <td>Myanmar</td>
-                    </tr>
-                </tbody>
-            </table>
+            <?php if ($databaseError): ?>
+                <p>Team fun facts cannot be displayed because the database is unavailable.</p>
+            <?php elseif (!empty($members)): ?>
+                <table class="fun-facts-table">
+                    <caption>A few fun facts about our project team</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Student</th>
+                            <th scope="col">Dream Job</th>
+                            <th scope="col">Coding Snack</th>
+                            <th scope="col">Hometown</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($members as $member): ?>
+                            <tr>
+                                <th scope="row"><?= about_escape($member['member_name']) ?></th>
+                                <td><?= about_escape($member['dream_job'] ?: 'Not specified') ?></td>
+                                <td><?= about_escape($member['coding_snack'] ?: 'Not specified') ?></td>
+                                <td><?= about_escape($member['hometown'] ?: 'Not specified') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No team fun facts are currently available.</p>
+            <?php endif; ?>
         </section>
 
         <!-- ==================== TEAM MESSAGE ==================== -->
@@ -172,6 +225,10 @@
     <!-- ==================== FOOTER ==================== -->
     <?php include 'footer.inc'; ?>
 
-
+    <?php
+    if ($conn instanceof mysqli) {
+        $conn->close();
+    }
+    ?>
 </body>
 </html>
