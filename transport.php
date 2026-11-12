@@ -21,7 +21,7 @@
 
         <section class="detail-section">
             <!-- GO BACK BUTTON -->
-            <a href="explore.html" class="back-btn">&larr; Go Back</a>
+            <a href="explore.php" class="back-btn">&larr; Go Back</a>
             
             <h1 style="
             text-align: left; 
