@@ -12,7 +12,7 @@
     
     <nav class="footer-links" aria-label="Footer navigation">
         <a href="https://minkhantkyaw3157.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiNzBkYmYxNTQwMmQ4NGRhYThkNTUxYTMwODFhODhiMzQiLCJwIjoiaiJ9" target="_blank" rel="noopener noreferrer">Jira Project</a>
-        <a href="https://github.com/pyaekhantkyaw/G02-Smart-City-Infrastructure-Consultancy-Part1-Group2.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://github.com/pyaekhantkyaw/G02-Smart-City-Infrastructure-Consultancy-Part2-Group.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
         <a href="mailto:urbansync2026@gmail.com">Email Us</a>
     </nav>
 
