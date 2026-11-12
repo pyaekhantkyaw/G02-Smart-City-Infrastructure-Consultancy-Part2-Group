@@ -21,6 +21,29 @@ function isChecked(string $key, string $value): string {
     $stored = $old[$key] ?? null;
     return (is_array($stored) ? in_array($value, $stored, true) : $stored === $value) ? 'checked' : '';
 }
+
+$jobs = [];
+$jobsLoadError = false;
+try {
+    $config = require __DIR__ . '/settings.php';
+    $dsn = 'mysql:host=' . $config['host'] . ';dbname=' . $config['database'] . ';charset=utf8mb4';
+    $pdo = new PDO($dsn, $config['user'], $config['password'], [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+    $jobs = $pdo->query(<<<'SQL'
+SELECT job_reference, job_title
+FROM jobs
+WHERE status = 'Open'
+  AND (closing_date IS NULL OR closing_date >= CURDATE())
+ORDER BY job_title ASC
+SQL)->fetchAll();
+} catch (PDOException $exception) {
+    error_log('Unable to load available jobs: ' . $exception->getMessage());
+    $jobsLoadError = true;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,17 +68,7 @@ function isChecked(string $key, string $value): string {
 </head>
 <body>
     <!-- ==================== HEADER ==================== -->
-    <header>
-        <nav class="main-nav" aria-label="Main navigation">
-            <a href="index.php">
-                <img src="images/logo.png" alt="UrbanSync Logo" style="height: 80px; width: auto; margin-right: 10px;">
-            </a>
-            <a href="index.php">Home</a>
-            <a href="jobs.php">Jobs</a>
-            <a href="explore.php">Explore</a>
-            <a href="about.php">About</a>
-        </nav>
-    </header>
+    <?php include 'header.inc'; ?>
     <!-- ==================== Audio ==================== -->
     <audio id="submit-sound" src="apply.wav" preload="auto"></audio>
     <!-- ==================== MAIN CONTENT ==================== -->
@@ -79,6 +92,11 @@ function isChecked(string $key, string $value): string {
 
         <!-- ==================== APPLICATION FORM ==================== -->
         <section>
+            <?php if ($jobsLoadError): ?>
+                <p role="alert">Job listings could not be loaded. Please check that MySQL is running and that the jobs table is available.</p>
+            <?php elseif ($jobs === []): ?>
+                <p role="status">There are no open jobs accepting applications at the moment.</p>
+            <?php endif; ?>
             <form class="application-form" action="process_eoi.php" method="post" novalidate>
                 <!-- HTML validation is disabled as for Part 2; PHP validates all inputs. -->
                 <input type="hidden" name="csrf_token" value="<?= e($_SESSION['csrf_token']) ?>">
@@ -88,7 +106,18 @@ function isChecked(string $key, string $value): string {
                     <div class="form-grid">
                         <div>
                             <label for="job-reference">Job Reference *</label>
-                            <input type="text" id="job-reference" name="job-reference" maxlength="5" placeholder="TRS01 or EGS02" value="<?= oldValue('job-reference') ?>">
+                            <select id="job-reference" name="job-reference" <?= $jobs === [] ? 'disabled' : '' ?>>
+                                <option value=""><?= $jobs === [] ? 'No open jobs available' : 'Select a job reference' ?></option>
+                                <?php foreach ($jobs as $job): ?>
+                                    <?php 
+                                        $ref = $job['job_reference']; 
+                                        $title = $job['job_title']; 
+                                    ?>
+                                    <option value="<?= e($ref) ?>" <?= isSelected('job-reference', $ref) ?>>
+                                        <?= e($ref . ' - ' . $title) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                 </fieldset>
@@ -194,41 +223,6 @@ function isChecked(string $key, string $value): string {
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-<footer>
-
-    <div class="footer-brand">
-        <p>
-            <a href="https://pyaekhantkyaw.github.io/G02-Smart-City-Infrastructure-Consultancy-Part1-Group2/" 
-            target="_blank" 
-            rel="noopener noreferrer">
-            <strong>UrbanSync Infrastructure Consultancy</strong>
-            </a>
-        </p>
-    </div>
-    
-    <nav class="footer-links" aria-label="Footer navigation">
-        <a href="https://minkhantkyaw3157.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog?atlOrigin=eyJpIjoiNzBkYmYxNTQwMmQ4NGRhYThkNTUxYTMwODFhODhiMzQiLCJwIjoiaiJ9" target="_blank" rel="noopener noreferrer">Jira Project</a>
-        <a href="https://github.com/pyaekhantkyaw/G02-Smart-City-Infrastructure-Consultancy-Part1-Group2.git" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
-        <a href="mailto:urbansync2026@gmail.com">Email Us</a>
-    </nav>
-
-    <div class="footer-credits">
-        <h2>Credit</h2>
-            <ul class="footer-list">
-                <li><a href="https://www.linkedin.com/jobs/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                <li><a href="https://www.w3schools.com/" target="_blank" rel="noopener noreferrer">W3Schools</a></li>
-                <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML" target="_blank" rel="noopener noreferrer">MDN Accessibility</a></li>
-                <li><a href="https://blog.hubspot.com/website/recruitment-websites-design" target="_blank" rel="noopener noreferrer">HubSpot Recruitment Design</a></li>
-                <li><a href="https://www.everything.design/blog/career-page-examples" target="_blank" rel="noopener noreferrer">Career Page Design</a></li>
-                <li><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini AI</a></li>
-            </ul>
-    </div>
-
-
-    <p class="footer-copyright">
-        &copy; 2026 UrbanSync Infrastructure Consultancy
-    </p>
-
-</footer>
+    <?php include 'footer.inc'; ?>
 </body>
 </html>
