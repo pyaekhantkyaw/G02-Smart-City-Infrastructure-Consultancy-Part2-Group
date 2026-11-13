@@ -5,12 +5,14 @@ declare(strict_types=1);
 const APPLICATION_TIMEZONE = 'Asia/Kuala_Lumpur';
 const MINIMUM_APPLICANT_AGE = 18;
 
+//start with clean text 
 function postedText(array $post, string $name): string
 {
     $value = $post[$name] ?? '';
     return is_string($value) ? trim(stripslashes($value)) : '';
 }
 
+// Count Unicode characters without requiring the mbstring extension.
 function charLength(string $value): int
 {
     // Count Unicode characters without requiring the mbstring extension.
@@ -42,9 +44,10 @@ function validateApplication(array $post, ?DateTimeImmutable $today = null): arr
     }
 
     foreach (['first-name' => 'First name', 'last-name' => 'Last name'] as $field => $label) {
-        $name = $data[$field];
-        if (!preg_match('/^[A-Za-z]{1,20}$/D', $name)) {
-            $errors[$field] = "$label must contain 1–20 letters only.";
+        $name = trim($data[$field]);
+        $data[$field] = $name;
+        if (!preg_match('/^[\p{L}\x{2019}\'\- ]{1,40}$/uD', $name)) {
+            $errors[$field] = "$label must contain 1–40 letters only. May include spaces, hyphens or apostrophes.";
         }
     }
 
@@ -93,6 +96,22 @@ function validateApplication(array $post, ?DateTimeImmutable $today = null): arr
     }
     if (!preg_match('/^[0-9]{4}$/D', $data['postcode'])) {
         $errors['postcode'] = 'Postcode must contain exactly four digits.';
+    } else {
+        // Cross-check Austrlian postcode starting digits against the selected state/territory.
+        $firstDigit = $data['postcode'][0];
+        $validMapping = [
+            'VIC' => ['3', '8'],
+            'NSW' => ['1', '2'],
+            'QLD' => ['4', '9'],
+            'NT'  => ['0'],
+            'WA'  => ['6'],
+            'SA'  => ['5'],
+            'TAS' => ['7'],
+            'ACT' => ['0'],
+        ];
+        if (!in_array($firstDigit, $validMapping[$data['state']], true)) {
+            $errors['postcode'] = 'Postcode does not match the selected state or territory.';
+        }
     }
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL) || strlen($data['email']) > 254) {
         $errors['email'] = 'Enter a valid email address.';

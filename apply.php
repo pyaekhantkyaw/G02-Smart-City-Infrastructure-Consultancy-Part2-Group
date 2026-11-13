@@ -1,17 +1,20 @@
 <?php
 session_start();
-$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32));
-$errors = $_SESSION['application_errors'] ?? [];
-$old = $_SESSION['application_old'] ?? [];
-unset($_SESSION['application_errors'], $_SESSION['application_old']);
+$_SESSION['csrf_token'] ??= bin2hex(random_bytes(32)); // Generate a CSRF 64 character token if not already set.
+$errors = $_SESSION['application_errors'] ?? []; // Retrieve validation errors & put inside the error array from the previous submission, if any.
+$old = $_SESSION['application_old'] ?? []; // Retrieve old form values from the previous submission, if any.
+unset($_SESSION['application_errors'], $_SESSION['application_old']);  // Clear the session variables so that they don't persist after the next page load.
 
+// e is a helper function to escape HTML special characters for safe output in the HTML context. Wrap dynamic text is e() before printing in html to prevent XSS attacks.
 function e(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
-function oldValue(string $key): string {
-    global $old;
+function oldValue(string $key): string { // Retrieve the old value for a given form field from the previous submission, if any, and escape it for safe output in HTML.
+    global $old; //arrary defined outside the function, so we need to use global to access it inside the function
     return e(is_string($old[$key] ?? null) ? $old[$key] : '');
 }
+
+// isSelected and isChecked are helper functions to determine if a form field should be marked as selected or checked based on the old form values from the previous submission.
 function isSelected(string $key, string $value): string {
     global $old;
     return ($old[$key] ?? '') === $value ? 'selected' : '';
@@ -22,14 +25,15 @@ function isChecked(string $key, string $value): string {
     return (is_array($stored) ? in_array($value, $stored, true) : $stored === $value) ? 'checked' : '';
 }
 
+//try and catch -- to wrap the database code if the connectionf fails, also show a friendly message instead of exposing sensitive db crednentials to the user.
 $jobs = [];
 $jobsLoadError = false;
 try {
     $config = require __DIR__ . '/settings.php';
-    $dsn = 'mysql:host=' . $config['host'] . ';dbname=' . $config['database'] . ';charset=utf8mb4';
+    $dsn = 'mysql:host=' . $config['host'] . ';dbname=' . $config['database'] . ';charset=utf8mb4'; // Data source name connection string, MySQL, HOST, DB name and utf8mb4 charset for full Unicode support.
     $pdo = new PDO($dsn, $config['user'], $config['password'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Throw exceptions on errors for better error handling.
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // return rows as clean associative array instead of data with numeric indexes.
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
     $jobs = $pdo->query(<<<'SQL'
@@ -78,16 +82,20 @@ SQL)->fetchAll();
             <h1>Job Application</h1>
             <p>Complete the form below to apply for a position at UrbanSync Infrastructure Consultancy.</p>
             <p class="form-note">Fields marked with an asterisk (*) are required. Applicants must be at least 18 years old on the date they apply. Enter your date of birth in dd/mm/yyyy format.</p>
-            <?php if ($errors !== []): ?>
+            
+            <!--conditional error box to display validation errors if any exist from the previous submission.-->
+            <!-- close unordered list, alert div and end the PHP -->
+            <?php if ($errors !== []): ?> 
                 <div role="alert" class="validation-errors" style="max-width:900px; margin:1rem auto; padding:1rem; border:2px solid #b42318; border-radius:0.5rem;">
                     <h2 style="font-size:1.15rem;">Please correct the following:</h2>
                     <ul>
-                        <?php foreach ($errors as $field => $message): ?>
+                        <!-- foreach loop through every error inisde $errors -->
+                        <?php foreach ($errors as $field => $message): ?> 
                             <li><?= e($message) ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
-            <?php endif; ?>
+            <?php endif; ?> 
         </section>
 
         <!-- ==================== APPLICATION FORM ==================== -->
@@ -181,14 +189,17 @@ SQL)->fetchAll();
                         <div>
                             <label for="postcode">Postcode *</label>
                             <input type="text" id="postcode" name="postcode" maxlength="4" inputmode="numeric" autocomplete="postal-code" value="<?= oldValue('postcode') ?>">
+                            <small>Enter exactly four digits and match the selected state or territory.</small>
                         </div>
                         <div>
                             <label for="email">Email *</label>
                             <input type="email" id="email" name="email" autocomplete="email" value="<?= oldValue('email') ?>">
+                            <small>Enter a valid email address (e.g., user@example.com).</small>
                         </div>
                         <div>
                             <label for="phone">Phone *</label>
                             <input type="tel" id="phone" name="phone" autocomplete="tel" value="<?= oldValue('phone') ?>">
+                            <small>Enter digits only (8-12 numbers). No spaces, hyphens, or letters.</small>
                         </div>
                     </div>
                 </fieldset>
