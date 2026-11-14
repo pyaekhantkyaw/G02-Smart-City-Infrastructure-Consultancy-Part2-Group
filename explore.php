@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore | UrbanSync</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
     <!-- ================= NAVBAR ================= -->
     <?php
-        include "header.inc";
+        include "includes/header.inc";
     ?>
 
     <!-- ================= INFRASTRUCTURE SECTION ================= -->
@@ -210,7 +210,7 @@
 
     <!-- ==================== FOOTER ==================== -->
 <?php
-    include "footer.inc";
+    include "includes/footer.inc";
 ?>
 
 </body>

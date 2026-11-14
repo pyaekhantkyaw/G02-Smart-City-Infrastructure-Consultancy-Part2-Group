@@ -1,6 +1,6 @@
 <?php
 // The page that includes this header should start its session before any HTML output.
-require_once __DIR__ . '/manager_functions.php';
+require_once __DIR__ . '/../manager_functions.php';
 $isManagerLoggedIn = isset($_SESSION['manager_user_id'])
     && is_int($_SESSION['manager_user_id']);
 ?>

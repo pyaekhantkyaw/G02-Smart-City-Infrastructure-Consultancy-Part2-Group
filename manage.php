@@ -137,7 +137,7 @@ $flash = managerTakeMessage();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Applications | UrbanSync HR</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .hr-main { max-width: 1260px; margin: 2rem auto; padding: 0 1rem 3rem; }
         .hr-top { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
@@ -173,7 +173,7 @@ $flash = managerTakeMessage();
     </style>
 </head>
 <body>
-<?php if (is_file(__DIR__ . '/header.inc')) { include __DIR__ . '/header.inc'; } ?>
+<?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>
 <main class="hr-main">
     <div class="hr-top">
         <div>
@@ -331,6 +331,6 @@ $flash = managerTakeMessage();
         <?php endif; ?>
     </section>
 </main>
-<?php if (is_file(__DIR__ . '/footer.inc')) { include __DIR__ . '/footer.inc'; } ?>
+<?php if (is_file(__DIR__ . '/includes/footer.inc')) { include __DIR__ . '/includes/footer.inc'; } ?>
 </body>
 </html>

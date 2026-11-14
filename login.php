@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Manager Login | UrbanSync</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .hr-login { max-width: 460px; margin: 4rem auto; padding: 2rem; background: #fff;
             border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 6px 22px #17255412; }
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-<?php if (is_file(__DIR__ . '/header.inc')) { include __DIR__ . '/header.inc'; } ?>
+<?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>
 <main class="hr-login">
     <h1>HR Manager Login</h1>
     <p>Sign in to review job applications.</p>
@@ -85,6 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
     <p><a href="index.php">Return to home</a></p>
 </main>
-<?php if (is_file(__DIR__ . '/footer.inc')) { include __DIR__ . '/footer.inc'; } ?>
+<?php if (is_file(__DIR__ . '/includes/footer.inc')) { include __DIR__ . '/includes/footer.inc'; } ?>
 </body>
 </html>
