@@ -67,7 +67,31 @@
 
         </section>
 
+<!-- ==================== VISION AND MISSION ==================== -->
+        <section class="vision-mission" aria-labelledby="vision-mission-heading">
+            <h2 id="vision-mission-heading">Our Vision &amp; Mission</h2>
 
+            <div class="vision-mission-grid">
+                <article class="vision-mission-card">
+                    <h3>Our Vision</h3>
+                    <p>
+                        To shape connected, resilient, and inclusive cities where
+                        smart infrastructure improves everyday life and supports
+                        a more sustainable future.
+                    </p>
+                </article>
+
+                <article class="vision-mission-card">
+                    <h3>Our Mission</h3>
+                    <p>
+                        To help councils and organisations turn urban data into
+                        practical solutions for smarter transport, efficient
+                        energy use, and accessible public services.
+                    </p>
+                </article>
+            </div>
+        </section>
+        
         <!-- ==================== WHAT WE DO ==================== -->
         <section>
 

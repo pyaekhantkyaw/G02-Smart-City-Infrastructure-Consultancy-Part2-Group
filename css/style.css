@@ -1022,3 +1022,42 @@ footer > p.footer-copyright {
     grid-template-columns: 1fr;
   }
 }
+
+/* ================================
+   VISION AND MISSION SECTION
+================================ */
+
+.vision-mission {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+}
+
+.vision-mission h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.vision-mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.vision-mission-card {
+    padding: 1.5rem;
+    background: #f5f9fb;
+    border: 1px solid #d6e2e9;
+    border-left: 4px solid #174b68;
+    border-radius: 8px;
+}
+
+.vision-mission-card h3 {
+    margin-top: 0;
+    color: #174b68;
+}
+
+.vision-mission-card p {
+    margin-bottom: 0;
+    line-height: 1.7;
+}
