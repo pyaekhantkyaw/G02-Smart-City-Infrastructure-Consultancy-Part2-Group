@@ -79,7 +79,7 @@ function about_escape($value)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Our Team | UrbanSync Infrastructure Consultancy</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .about-intro {
             text-align: center;
@@ -95,7 +95,7 @@ function about_escape($value)
 </head>
 <body>
     <!-- ==================== HEADER ==================== -->
-    <?php include 'header.inc'; ?>
+    <?php include 'includes/header.inc'; ?>
 
     <!-- ==================== MAIN CONTENT ==================== -->
     <main>
@@ -223,7 +223,7 @@ function about_escape($value)
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-    <?php include 'footer.inc'; ?>
+    <?php include 'includes/footer.inc'; ?>
 
     <?php
     if ($conn instanceof mysqli) {

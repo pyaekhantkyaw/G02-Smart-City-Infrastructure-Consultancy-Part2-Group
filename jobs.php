@@ -220,7 +220,7 @@ function jobs_format_date($date)
 
     <title>Career Opportunities | UrbanSync</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <style>
         .jobs-intro {
@@ -237,7 +237,7 @@ function jobs_format_date($date)
 <body>
 
     <!-- Header -->
-    <?php include 'header.inc'; ?>
+    <?php include 'includes/header.inc'; ?>
 
     <main>
 
@@ -583,7 +583,7 @@ function jobs_format_date($date)
 
 
     <!-- Footer -->
-    <?php include 'footer.inc'; ?>
+    <?php include 'includes/footer.inc'; ?>
 
 
 </body>

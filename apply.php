@@ -55,7 +55,7 @@ SQL)->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for a Position | UrbanSync Infrastructure Consultancy</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .application-intro {
             text-align: center;
@@ -72,7 +72,7 @@ SQL)->fetchAll();
 </head>
 <body>
     <!-- ==================== HEADER ==================== -->
-    <?php include 'header.inc'; ?>
+    <?php include 'includes/header.inc'; ?>
     <!-- ==================== Audio ==================== -->
     <audio id="submit-sound" src="apply.wav" preload="auto"></audio>
     <!-- ==================== MAIN CONTENT ==================== -->
@@ -234,6 +234,6 @@ SQL)->fetchAll();
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-    <?php include 'footer.inc'; ?>
+    <?php include 'includes/footer.inc'; ?>
 </body>
 </html>

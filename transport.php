@@ -7,13 +7,13 @@
 
     <title>Transport | UrbanSync</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
 <!-- ==================== HEADER ==================== -->
-<?php include 'header.inc'; ?>
+<?php include 'includes/header.inc'; ?>
 
 
     <main>
@@ -67,7 +67,7 @@
 
 
     <!-- ==================== FOOTER ==================== -->
-    <?php include 'footer.inc'; ?>
+    <?php include 'includes/footer.inc'; ?>
 
 </body>
 </html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UrbanSync Infrastructure Consultancy</title>
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- embedded CSS -->
     <style>
         .hero_title {
@@ -29,7 +29,7 @@
 <body>
 
     <!-- ==================== HEADER ==================== -->
-    <?php include 'header.inc'; ?>
+    <?php include 'includes/header.inc'; ?>
 
 
     <!-- ==================== MAIN CONTENT ==================== -->
@@ -364,7 +364,7 @@
 
 
     <!-- ==================== FOOTER ==================== -->
-    <?php include 'footer.inc'; ?>
+    <?php include 'includes/footer.inc'; ?>
 
 </body>
 </html>
