@@ -138,39 +138,6 @@ $flash = managerTakeMessage();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Applications | UrbanSync HR</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .hr-main { max-width: 1260px; margin: 2rem auto; padding: 0 1rem 3rem; }
-        .hr-top { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
-        .hr-top form { margin:0; }
-        .hr-panel { padding:1.25rem; border:1px solid #cbd5e1; border-radius:10px;
-            background:#fff; margin:1.25rem 0; }
-        .hr-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:.9rem; }
-        .hr-field label { display:block; font-weight:600; margin-bottom:.35rem; }
-        .hr-field input, .hr-field select, .hr-inline select { box-sizing:border-box; width:100%;
-            padding:.55rem; border:1px solid #94a3b8; border-radius:5px; background:#fff; }
-        .hr-actions { display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; margin-top:1rem; }
-        .hr-button { padding:.6rem 1rem; border:0; border-radius:5px; font-weight:700;
-            color:#fff; background:#174b68; cursor:pointer; }
-        .hr-button.danger { background:#a32236; }
-        .hr-link { padding:.55rem .85rem; border:1px solid #94a3b8; border-radius:5px; }
-        .hr-table-scroll { overflow-x:auto; }
-        .hr-table { width:100%; min-width:930px; border-collapse:collapse; font-size:.94rem; }
-        .hr-table th, .hr-table td { border-bottom:1px solid #cbd5e1; padding:.7rem;
-            text-align:left; vertical-align:top; }
-        .hr-table th { background:#eef2f7; white-space:nowrap; }
-        .hr-inline { display:flex; align-items:center; gap:.4rem; }
-        .hr-inline select { min-width:90px; }
-        .hr-inline button { white-space:nowrap; }
-        .hr-details { padding:.6rem 0; max-width:420px; }
-        .hr-details dl { display:grid; grid-template-columns:120px 1fr; gap:.35rem .65rem; }
-        .hr-details dt { font-weight:700; }
-        .hr-details dd { margin:0; overflow-wrap:anywhere; white-space:pre-wrap; }
-        .hr-success { background:#e8f6ed; color:#166534; border:1px solid #166534; padding:1rem; }
-        .hr-error { background:#fff1f2; color:#881337; border:1px solid #be123c; padding:1rem; }
-        .hr-warning { background:#fff7e4; border:1px solid #b45309; padding:1rem; }
-        .hr-panel p { overflow-wrap:anywhere; }
-        .hr-muted { color:#475569; }
-    </style>
 </head>
 <body>
 <?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>

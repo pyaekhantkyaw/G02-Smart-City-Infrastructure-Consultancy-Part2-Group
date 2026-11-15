@@ -56,19 +56,6 @@ SQL)->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for a Position | UrbanSync Infrastructure Consultancy</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .application-intro {
-            text-align: center;
-        }
-        .application-form {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .form-note {
-            font-size: 0.9rem;
-            color: #555555;
-        }
-    </style>
 </head>
 <body>
     <!-- ==================== HEADER ==================== -->
