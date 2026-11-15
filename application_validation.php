@@ -38,9 +38,10 @@ function validateApplication(array $post, ?DateTimeImmutable $today = null): arr
         $data[$name] = postedText($post, $name);
     }
 
-    $data['job-reference'] = strtoupper($data['job-reference']);
-    if (!in_array($data['job-reference'], ['TRS01', 'EGS02'], true)) {
-        $errors['job-reference'] = 'Choose a valid job reference (TRS01 or EGS02).';
+    $data['job-reference'] = strtoupper(trim($data['job-reference']));
+
+    if (!preg_match('/^[A-Z]{3}[0-9]{2}$/', $data['job-reference'])) {
+        $errors['job-reference'] = 'Please select a valid job reference.';
     }
 
     foreach (['first-name' => 'First name', 'last-name' => 'Last name'] as $field => $label) {
