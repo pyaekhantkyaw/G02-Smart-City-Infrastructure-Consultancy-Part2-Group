@@ -55,17 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Manager Login | UrbanSync</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .hr-login { max-width: 460px; margin: 4rem auto; padding: 2rem; background: #fff;
-            border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 6px 22px #17255412; }
-        .hr-login h1 { margin-top: 0; }
-        .hr-login label { display:block; margin-top:1rem; font-weight:600; }
-        .hr-login input { display:block; box-sizing:border-box; width:100%; margin-top:.35rem;
-            padding:.7rem; border:1px solid #94a3b8; border-radius:6px; }
-        .hr-login button { margin-top:1.3rem; padding:.75rem 1.2rem; border:0; border-radius:6px;
-            background:#174b68; color:white; font-weight:700; cursor:pointer; }
-        .hr-error { padding:.8rem; background:#fff1f2; border:1px solid #be123c; color:#881337; border-radius:6px; }
-    </style>
 </head>
 <body>
 <?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>
