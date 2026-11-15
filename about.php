@@ -95,7 +95,7 @@ function about_escape($value)
 </head>
 <body>
     <!-- ==================== HEADER ==================== -->
-    <?php include 'includes/header.inc'; ?>
+    <?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>
 
     <!-- ==================== MAIN CONTENT ==================== -->
     <main>
@@ -223,7 +223,7 @@ function about_escape($value)
     </main>
 
     <!-- ==================== FOOTER ==================== -->
-    <?php include 'includes/footer.inc'; ?>
+    <?php if (is_file(__DIR__ . '/includes/footer.inc')) { include __DIR__ . '/includes/footer.inc'; } ?>
 
     <?php
     if ($conn instanceof mysqli) {

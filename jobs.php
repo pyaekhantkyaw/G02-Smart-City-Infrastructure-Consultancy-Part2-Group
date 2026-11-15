@@ -237,7 +237,7 @@ function jobs_format_date($date)
 <body>
 
     <!-- Header -->
-    <?php include 'includes/header.inc'; ?>
+    <?php if (is_file(__DIR__ . '/includes/header.inc')) { include __DIR__ . '/includes/header.inc'; } ?>
 
     <main>
 
@@ -636,7 +636,7 @@ function jobs_format_date($date)
 
 
     <!-- Footer -->
-    <?php include 'includes/footer.inc'; ?>
+    <?php if (is_file(__DIR__ . '/includes/footer.inc')) { include __DIR__ . '/includes/footer.inc'; } ?>
 
 
 </body>
