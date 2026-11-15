@@ -498,60 +498,113 @@ function jobs_format_date($date)
             </div>
 
 
-            <!-- Available Jobs Sidebar -->
-            <aside class="job-aside" style="
-        max-height: 75vh;
-        float: right; width: 25%; 
-        padding-left: 15px; 
-        padding-top: 15px; 
-        margin-top: 35px;
-        top: 100px; position: 
-        sticky; margin-right: 20px; 
-        overflow-y: auto; 
-        scrollbar-width: thin;
-        ">
+                        <!-- Available Jobs Sidebar -->
+            <aside class="job-aside" aria-label="Available Jobs and Application Guide" style="
+                max-height: 82vh;
+                float: right;
+                width: 27%;
+                padding: 12px 14px;
+                margin: 20px 15px 15px 0;
+                top: 90px;
+                position: sticky;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                line-height: 1.35;
+                font-size: 0.92rem;
+                ">
 
-                <h3>Available Jobs</h3>
+                <h3 style="margin: 0 0 4px 0;">Available Jobs (<?= count($jobs) ?>)</h3>
+                <p style="margin: 0 0 10px 0;"><small>Click a title to view full details or apply directly.</small></p>
 
                 <?php if ($databaseError): ?>
 
-                    <p>Jobs are currently unavailable.</p>
+                    <p style="margin: 0;">Jobs are currently unavailable.</p>
 
                 <?php else: ?>
 
                     <?php foreach ($jobCategories as $category => $categoryJobs): ?>
 
-                        <details>
+                        <details open style="margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #d0d7de;">
 
-                            <summary><?= jobs_escape($category) ?></summary>
+                            <summary style="cursor: pointer; margin-bottom: 4px;">
+                                <strong><?= jobs_escape($category) ?></strong>
+                                (<?= count($categoryJobs) ?>)
+                            </summary>
 
                             <?php if (!empty($categoryJobs)): ?>
 
-                                <ul>
+                                <ul style="margin: 4px 0 2px 0; padding-left: 16px; list-style-type: disc;">
                                     <?php foreach ($categoryJobs as $job): ?>
-                                        <li>
-                                            <a href="#job-<?= jobs_escape($job['job_reference']) ?>">
-                                                <?= jobs_escape($job['job_title']) ?>
-                                            </a>
+                                        <li style="margin-bottom: 8px;">
+                                            <div>
+                                                <a href="#job-<?= jobs_escape($job['job_reference']) ?>">
+                                                    <strong><?= jobs_escape($job['job_title']) ?></strong>
+                                                </a>
+                                            </div>
+                                            <small style="display: block;">
+                                                <strong>Ref:</strong> <?= jobs_escape($job['job_reference']) ?>
+                                                <?php if (!empty($job['status'])): ?>
+                                                    &bull; <strong>Status:</strong> <?= jobs_escape($job['status']) ?>
+                                                <?php endif; ?>
+                                            </small>
+                                            <small style="display: block;">
+                                                <strong>Salary:</strong> <?= jobs_escape($job['salary'] ?: 'Not specified') ?>
+                                            </small>
+                                            <small style="display: block;">
+                                                <strong>Reports to:</strong> <?= jobs_escape($job['reports_to'] ?: 'Not specified') ?>
+                                            </small>
+                                            <?php if (!empty($job['location'])): ?>
+                                                <small style="display: block;">
+                                                    <strong>Location:</strong> <?= jobs_escape($job['location']) ?>
+                                                </small>
+                                            <?php endif; ?>
+                                            <?php if (!empty($job['closing_date'])): ?>
+                                                <small style="display: block;">
+                                                    <strong>Closes:</strong> <?= jobs_escape(jobs_format_date($job['closing_date'])) ?>
+                                                </small>
+                                            <?php endif; ?>
+                                            <small style="display: block; margin-top: 2px;">
+                                                <a href="#job-<?= jobs_escape($job['job_reference']) ?>">Read Full Spec</a>
+                                                &nbsp;|&nbsp;
+                                                <a href="apply.php?job_ref=<?= urlencode($job['job_reference']) ?>"><strong>Apply Now &rarr;</strong></a>
+                                            </small>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
 
                             <?php elseif ($searchTerm !== ''): ?>
 
-                                <p>No matching jobs in this category.</p>
+                                <p style="margin: 4px 0;"><small>No matching jobs in this category.</small></p>
 
                             <?php else: ?>
 
-                                <ul>
-                                    <li>Currently Unavailable</li>
-                                </ul>
+                                <p style="margin: 4px 0;"><small>Currently Unavailable</small></p>
 
                             <?php endif; ?>
 
                         </details>
 
                     <?php endforeach; ?>
+
+                    <!-- Quick Eligibility & Core Skills Summary -->
+                    <section style="margin-top: 8px; padding-top: 4px;">
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.98rem;">Applicant Requirements</h4>
+                        <ul style="margin: 0 0 8px 0; padding-left: 16px; font-size: 0.85rem;">
+                            <li style="margin-bottom: 3px;"><strong>Minimum Age:</strong> 18+ years at application date.</li>
+                            <li style="margin-bottom: 3px;"><strong>Location:</strong> Valid Australian state &amp; 4-digit postcode.</li>
+                            <li style="margin-bottom: 3px;"><strong>Core Tech Stack:</strong> Data Analysis, Power BI, SQL, Python, or Project Management.</li>
+                            <li style="margin-bottom: 3px;"><strong>Reference Code:</strong> Required 5-character code (e.g., <code>TRS01</code>, <code>EGS02</code>).</li>
+                        </ul>
+
+                        <h4 style="margin: 6px 0 4px 0; font-size: 0.98rem;">Recruitment Support</h4>
+                        <p style="margin: 0 0 6px 0; font-size: 0.85rem;">
+                            Questions about role scope or smart-city consultancy projects? Contact HR at
+                            <a href="mailto:urbansync2026@gmail.com">urbansync2026@gmail.com</a>.
+                        </p>
+                        <p style="margin: 4px 0 0 0;">
+                            <a href="apply.php"><strong>Go to EOI Application Form &rarr;</strong></a>
+                        </p>
+                    </section>
 
                 <?php endif; ?>
 
